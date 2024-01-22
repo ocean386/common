@@ -11,6 +11,7 @@ require (
 	github.com/karlseguin/ccache/v3 v3.0.5
 	github.com/longbridgeapp/sqlparser v0.3.1
 	github.com/pkg/errors v0.9.1
+	github.com/valyala/fasthttp v1.51.0
 	github.com/zeromicro/go-zero v1.6.1
 	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a
 	google.golang.org/grpc v1.60.1
@@ -22,6 +23,7 @@ require (
 )
 
 require (
+	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
@@ -35,6 +37,7 @@ require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/klauspost/compress v1.17.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
@@ -46,6 +49,7 @@ require (
 	github.com/prometheus/common v0.44.0 // indirect
 	github.com/prometheus/procfs v0.11.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
+	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	go.opentelemetry.io/otel v1.19.0 // indirect
 	go.opentelemetry.io/otel/exporters/jaeger v1.17.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.19.0 // indirect
