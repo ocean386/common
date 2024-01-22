@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-var SnowFlakeID = &SnowFlakeIdWorker{}
+//var SnowFlakeID = &SnowFlakeIdWorker{}
 
 type SnowFlakeIdWorker struct {
 
@@ -60,7 +60,14 @@ type SnowFlakeIdWorker struct {
 	lock sync.Mutex
 }
 
-func (p *SnowFlakeIdWorker) init(dataCenterId int64, workerId int64) {
+// NewSnowFlakeIdWorker 创建并返回一个新的 SnowFlakeIdWorker 实例的指针
+func NewSnowFlakeIdWorker(dataCenterId, workerId int64) *SnowFlakeIdWorker {
+	snowFlakeID := &SnowFlakeIdWorker{}
+	snowFlakeID.Init(dataCenterId, workerId)
+	return snowFlakeID
+}
+
+func (p *SnowFlakeIdWorker) Init(dataCenterId int64, workerId int64) {
 	// 开始时间戳；这里是2021-06-01
 	p.twepoch = 1622476800000
 	// 机器ID所占的位数
@@ -98,7 +105,7 @@ func (p *SnowFlakeIdWorker) init(dataCenterId int64, workerId int64) {
 }
 
 // 生成ID 注意此方法已经通过加锁来保证线程安全
-func (p *SnowFlakeIdWorker) nextId() int64 {
+func (p *SnowFlakeIdWorker) GenerateSnowFlakeID() int64 {
 	p.lock.Lock()
 	defer p.lock.Unlock()
 
@@ -174,7 +181,7 @@ func convertIPToInt(ip net.IP) int64 {
 }
 
 // 生成分布式唯一ID
-func GenerateSnowFlakeID() int64 {
-
-	return SnowFlakeID.nextId()
-}
+//func GenerateSnowFlakeID() int64 {
+//
+//	return SnowFlakeID.nextId()
+//}
