@@ -22,6 +22,11 @@ func init() {
 	message[StatusDBSelectError] = "Database select error"
 	message[StatusDBCountError] = "Database count error"
 
+	//Redis
+	message[StatusRedisError] = "Redis error"
+	//交易所平台
+	message[StatusDBCountError] = "OK platfrom error"
+
 }
 
 // 根据错误码映射msg内容

@@ -44,6 +44,7 @@ func NewErrMsg(errMsg string) *CodeError {
 	return err
 }
 
+// 系统错误
 func NewSystemErr() *CodeError {
 	return NewErrCode(int32(StatusCodeError))
 }
@@ -71,6 +72,16 @@ func NewDBSelectErr() *CodeError {
 
 func NewDBCountErr() *CodeError {
 	return NewErrCode(int32(StatusDBCountError))
+}
+
+// Redis
+func NewRedisErr() *CodeError {
+	return NewErrCode(int32(StatusRedisError))
+}
+
+// 交易所平台
+func NewPlatformErr() *CodeError {
+	return NewErrCode(int32(StatusPlatformError))
 }
 
 /*

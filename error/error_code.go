@@ -25,3 +25,8 @@ const (
 const (
 	StatusRedisError ErrCode = 1010
 )
+
+// 交易所平台相关状态码
+const (
+	StatusPlatformError ErrCode = 1100
+)
