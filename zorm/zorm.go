@@ -11,7 +11,7 @@ import (
 
 func NewClient(config *DBConfig) *gorm.DB {
 
-	dbMain := getConn(config.MainSource.SchemaConfig, config.Mode)
+	dbMain := getConn(config.MainSource.SchemaConfig, config.Mode, config.DisableLog)
 	for _, shading := range config.Sharding {
 		var args []interface{}
 		for _, table := range shading.Tables {
@@ -29,7 +29,7 @@ func NewClient(config *DBConfig) *gorm.DB {
 	}
 	var dbMainRes []gorm.Dialector
 	for _, replica := range config.MainSource.Replicas {
-		dbMainRes = append(dbMainRes, getConn(replica, config.Mode).Dialector)
+		dbMainRes = append(dbMainRes, getConn(replica, config.Mode, config.DisableLog).Dialector)
 	}
 
 	mainSource := dbresolver.Register(
@@ -42,11 +42,11 @@ func NewClient(config *DBConfig) *gorm.DB {
 
 		var res []gorm.Dialector
 		for _, replica := range source.Replicas {
-			db := getConn(replica, config.Mode)
+			db := getConn(replica, config.Mode, config.DisableLog)
 			res = append(res, db.Dialector)
 		}
 		var s []gorm.Dialector
-		db := getConn(source.SchemaConfig, config.Mode)
+		db := getConn(source.SchemaConfig, config.Mode, config.DisableLog)
 		s = append(s, db.Dialector)
 		var args []interface{}
 		for _, table := range source.Tables {
@@ -86,12 +86,12 @@ func NewClient(config *DBConfig) *gorm.DB {
 	return dbMain
 }
 
-func getConn(config SchemaConfig, mode string) *gorm.DB {
+func getConn(config SchemaConfig, mode string, disableLog bool) *gorm.DB {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		config.Username, config.Password, config.Host,
 		config.Port, config.DBName,
 	)
-	Db, err := gorm.Open(mysql.New(mysql.Config{DSN: dsn}), &gorm.Config{Logger: NewGormLogger(mode)})
+	Db, err := gorm.Open(mysql.New(mysql.Config{DSN: dsn}), &gorm.Config{Logger: NewGormLogger(mode, disableLog)})
 	if err != nil {
 		panic(err)
 	}

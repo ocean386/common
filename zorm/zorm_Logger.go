@@ -12,14 +12,15 @@ import (
 
 type GormLogger struct {
 	SlowThreshold time.Duration
-	bPrintLog     bool //是否关闭打印SQL日志
+	DisableLog    bool //是否关闭打印SQL日志
 	Mode          string
 }
 
-func NewGormLogger(c string) *GormLogger {
+func NewGormLogger(c string, b bool) *GormLogger {
 	return &GormLogger{
 		SlowThreshold: 200 * time.Millisecond, // 一般超过200毫秒就算慢查所以不使用配置进行更改
 		Mode:          c,
+		DisableLog:    b,
 	}
 }
 
@@ -64,7 +65,7 @@ func (l *GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql 
 		logx.WithContext(ctx).Sloww("Database Slow Log", logFields...)
 	}
 	// 生产模式(service.ProMode) 记录所有 SQL 请求
-	if l.bPrintLog != false && sql != "SHOW STATUS" {
+	if l.DisableLog == false && sql != "SHOW STATUS" {
 		logx.WithContext(ctx).Infow("Database Query", logFields...)
 	}
 }

@@ -23,6 +23,7 @@ type DBConfig struct {
 	Prometheus  DBPrometheus `json:",optional"`
 	Sharding    []DBSharding `json:",optional"`
 	Mode        string       `json:",optional"`
+	DisableLog  bool         `json:",optional"`
 }
 
 type Source struct {
