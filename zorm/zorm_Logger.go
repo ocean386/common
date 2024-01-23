@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/go-zero/core/service"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"time"
@@ -13,13 +12,14 @@ import (
 
 type GormLogger struct {
 	SlowThreshold time.Duration
-	mode          string
+	bPrintLog     bool //是否关闭打印SQL日志
+	Mode          string
 }
 
 func NewGormLogger(c string) *GormLogger {
 	return &GormLogger{
 		SlowThreshold: 200 * time.Millisecond, // 一般超过200毫秒就算慢查所以不使用配置进行更改
-		mode:          c,
+		Mode:          c,
 	}
 }
 
@@ -63,8 +63,8 @@ func (l *GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql 
 	if l.SlowThreshold != 0 && elapsed > l.SlowThreshold {
 		logx.WithContext(ctx).Sloww("Database Slow Log", logFields...)
 	}
-	// 非生产模式下，记录所有 SQL 请求
-	if l.mode != service.ProMode && sql != "SHOW STATUS" {
+	// 生产模式(service.ProMode) 记录所有 SQL 请求
+	if l.bPrintLog != false && sql != "SHOW STATUS" {
 		logx.WithContext(ctx).Infow("Database Query", logFields...)
 	}
 }
