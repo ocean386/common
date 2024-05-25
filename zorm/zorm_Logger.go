@@ -66,7 +66,7 @@ func (l *GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql 
 		logx.WithContext(ctx).Sloww("Database Slow Log", logFields...)
 	}
 	// 生产模式(service.ProMode) 记录所有 SQL 请求,指定前缀的表-关闭打印日志
-	if l.DisableLog == false && sql != "SHOW STATUS" && !strings.HasPrefix(sql, "bar_data_") {
+	if l.DisableLog == false && sql != "SHOW STATUS" && !strings.Contains(sql, "bar_data_") {
 		logx.WithContext(ctx).Infow("Database Query", logFields...)
 	}
 }
