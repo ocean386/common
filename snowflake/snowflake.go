@@ -62,8 +62,12 @@ type SnowFlakeIdWorker struct {
 func NewSnowFlakeWorker(redisClient *redis.Redis) *SnowFlakeIdWorker {
 
 	SnowFlakeWorker := &SnowFlakeIdWorker{}
-	dataCenterId := convertIPToInt(getIPv4Address())
+	dataCenterId := int64(1) //convertIPToInt(getIPv4Address())
 	workerId, _ := redisClient.Incrby("Trade-WorerID", 1)
+	if workerId >= 64 {
+		redisClient.Set("Trade-WorerID", "0")
+		workerId = 0
+	}
 	SnowFlakeWorker.InitSnowFlake(dataCenterId, workerId)
 
 	return SnowFlakeWorker
@@ -73,9 +77,9 @@ func (p *SnowFlakeIdWorker) InitSnowFlake(dataCenterId int64, workerId int64) {
 	// 开始时间戳；这里是2021-06-01
 	p.twepoch = 1622476800000
 	// 机器ID所占的位数
-	p.workerIdBits = 2
+	p.workerIdBits = 6 //8
 	// 数据标识ID所占的位数
-	p.dataCenterIdBits = 1
+	p.dataCenterIdBits = 1 //5
 	// 支持的最大机器ID，最大是31
 	p.maxWorkerId = -1 ^ (-1 << p.workerIdBits)
 	// 支持的最大机房ID，最大是 31
