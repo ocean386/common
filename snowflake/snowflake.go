@@ -73,9 +73,9 @@ func (p *SnowFlakeIdWorker) InitSnowFlake(dataCenterId int64, workerId int64) {
 	// 开始时间戳；这里是2021-06-01
 	p.twepoch = 1622476800000
 	// 机器ID所占的位数
-	p.workerIdBits = 8
+	p.workerIdBits = 2
 	// 数据标识ID所占的位数
-	p.dataCenterIdBits = 5
+	p.dataCenterIdBits = 1
 	// 支持的最大机器ID，最大是31
 	p.maxWorkerId = -1 ^ (-1 << p.workerIdBits)
 	// 支持的最大机房ID，最大是 31
