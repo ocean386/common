@@ -85,7 +85,7 @@ func (p *SnowFlakeIdWorker) InitSnowFlake(dataCenterId int64, workerId int64) {
 	// 支持的最大机房ID，最大是 31
 	p.maxDataCenterId = -1 ^ (-1 << p.dataCenterIdBits)
 	// 序列在ID中占的位数
-	p.sequenceBits = 12
+	p.sequenceBits = 9
 	// 机器ID向左移12位
 	p.workerIdShift = p.sequenceBits
 	// 机房ID向左移17位
