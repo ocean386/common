@@ -16,34 +16,114 @@ import (
 )
 
 var (
-	Q          = new(Query)
-	OrderEvent *orderEvent
+	Q             = new(Query)
+	BarData12h    *barData12h
+	BarData15m    *barData15m
+	BarData1h     *barData1h
+	BarData30m    *barData30m
+	BarData4h     *barData4h
+	BarData5m     *barData5m
+	BarDataDay    *barDataDay
+	BarDataMonth  *barDataMonth
+	BarDataWeek   *barDataWeek
+	CurencyTicker *curencyTicker
+	Currency      *currency
+	DailyDatum    *dailyDatum
+	MonitorDatum  *monitorDatum
+	OrderEvent    *orderEvent
+	OrderSpot     *orderSpot
+	SpotGrid      *spotGrid
+	SpotGridOrder *spotGridOrder
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	BarData12h = &Q.BarData12h
+	BarData15m = &Q.BarData15m
+	BarData1h = &Q.BarData1h
+	BarData30m = &Q.BarData30m
+	BarData4h = &Q.BarData4h
+	BarData5m = &Q.BarData5m
+	BarDataDay = &Q.BarDataDay
+	BarDataMonth = &Q.BarDataMonth
+	BarDataWeek = &Q.BarDataWeek
+	CurencyTicker = &Q.CurencyTicker
+	Currency = &Q.Currency
+	DailyDatum = &Q.DailyDatum
+	MonitorDatum = &Q.MonitorDatum
 	OrderEvent = &Q.OrderEvent
+	OrderSpot = &Q.OrderSpot
+	SpotGrid = &Q.SpotGrid
+	SpotGridOrder = &Q.SpotGridOrder
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:         db,
-		OrderEvent: newOrderEvent(db, opts...),
+		db:            db,
+		BarData12h:    newBarData12h(db, opts...),
+		BarData15m:    newBarData15m(db, opts...),
+		BarData1h:     newBarData1h(db, opts...),
+		BarData30m:    newBarData30m(db, opts...),
+		BarData4h:     newBarData4h(db, opts...),
+		BarData5m:     newBarData5m(db, opts...),
+		BarDataDay:    newBarDataDay(db, opts...),
+		BarDataMonth:  newBarDataMonth(db, opts...),
+		BarDataWeek:   newBarDataWeek(db, opts...),
+		CurencyTicker: newCurencyTicker(db, opts...),
+		Currency:      newCurrency(db, opts...),
+		DailyDatum:    newDailyDatum(db, opts...),
+		MonitorDatum:  newMonitorDatum(db, opts...),
+		OrderEvent:    newOrderEvent(db, opts...),
+		OrderSpot:     newOrderSpot(db, opts...),
+		SpotGrid:      newSpotGrid(db, opts...),
+		SpotGridOrder: newSpotGridOrder(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	OrderEvent orderEvent
+	BarData12h    barData12h
+	BarData15m    barData15m
+	BarData1h     barData1h
+	BarData30m    barData30m
+	BarData4h     barData4h
+	BarData5m     barData5m
+	BarDataDay    barDataDay
+	BarDataMonth  barDataMonth
+	BarDataWeek   barDataWeek
+	CurencyTicker curencyTicker
+	Currency      currency
+	DailyDatum    dailyDatum
+	MonitorDatum  monitorDatum
+	OrderEvent    orderEvent
+	OrderSpot     orderSpot
+	SpotGrid      spotGrid
+	SpotGridOrder spotGridOrder
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:         db,
-		OrderEvent: q.OrderEvent.clone(db),
+		db:            db,
+		BarData12h:    q.BarData12h.clone(db),
+		BarData15m:    q.BarData15m.clone(db),
+		BarData1h:     q.BarData1h.clone(db),
+		BarData30m:    q.BarData30m.clone(db),
+		BarData4h:     q.BarData4h.clone(db),
+		BarData5m:     q.BarData5m.clone(db),
+		BarDataDay:    q.BarDataDay.clone(db),
+		BarDataMonth:  q.BarDataMonth.clone(db),
+		BarDataWeek:   q.BarDataWeek.clone(db),
+		CurencyTicker: q.CurencyTicker.clone(db),
+		Currency:      q.Currency.clone(db),
+		DailyDatum:    q.DailyDatum.clone(db),
+		MonitorDatum:  q.MonitorDatum.clone(db),
+		OrderEvent:    q.OrderEvent.clone(db),
+		OrderSpot:     q.OrderSpot.clone(db),
+		SpotGrid:      q.SpotGrid.clone(db),
+		SpotGridOrder: q.SpotGridOrder.clone(db),
 	}
 }
 
@@ -57,18 +137,66 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:         db,
-		OrderEvent: q.OrderEvent.replaceDB(db),
+		db:            db,
+		BarData12h:    q.BarData12h.replaceDB(db),
+		BarData15m:    q.BarData15m.replaceDB(db),
+		BarData1h:     q.BarData1h.replaceDB(db),
+		BarData30m:    q.BarData30m.replaceDB(db),
+		BarData4h:     q.BarData4h.replaceDB(db),
+		BarData5m:     q.BarData5m.replaceDB(db),
+		BarDataDay:    q.BarDataDay.replaceDB(db),
+		BarDataMonth:  q.BarDataMonth.replaceDB(db),
+		BarDataWeek:   q.BarDataWeek.replaceDB(db),
+		CurencyTicker: q.CurencyTicker.replaceDB(db),
+		Currency:      q.Currency.replaceDB(db),
+		DailyDatum:    q.DailyDatum.replaceDB(db),
+		MonitorDatum:  q.MonitorDatum.replaceDB(db),
+		OrderEvent:    q.OrderEvent.replaceDB(db),
+		OrderSpot:     q.OrderSpot.replaceDB(db),
+		SpotGrid:      q.SpotGrid.replaceDB(db),
+		SpotGridOrder: q.SpotGridOrder.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	OrderEvent IOrderEventDo
+	BarData12h    IBarData12hDo
+	BarData15m    IBarData15mDo
+	BarData1h     IBarData1hDo
+	BarData30m    IBarData30mDo
+	BarData4h     IBarData4hDo
+	BarData5m     IBarData5mDo
+	BarDataDay    IBarDataDayDo
+	BarDataMonth  IBarDataMonthDo
+	BarDataWeek   IBarDataWeekDo
+	CurencyTicker ICurencyTickerDo
+	Currency      ICurrencyDo
+	DailyDatum    IDailyDatumDo
+	MonitorDatum  IMonitorDatumDo
+	OrderEvent    IOrderEventDo
+	OrderSpot     IOrderSpotDo
+	SpotGrid      ISpotGridDo
+	SpotGridOrder ISpotGridOrderDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		OrderEvent: q.OrderEvent.WithContext(ctx),
+		BarData12h:    q.BarData12h.WithContext(ctx),
+		BarData15m:    q.BarData15m.WithContext(ctx),
+		BarData1h:     q.BarData1h.WithContext(ctx),
+		BarData30m:    q.BarData30m.WithContext(ctx),
+		BarData4h:     q.BarData4h.WithContext(ctx),
+		BarData5m:     q.BarData5m.WithContext(ctx),
+		BarDataDay:    q.BarDataDay.WithContext(ctx),
+		BarDataMonth:  q.BarDataMonth.WithContext(ctx),
+		BarDataWeek:   q.BarDataWeek.WithContext(ctx),
+		CurencyTicker: q.CurencyTicker.WithContext(ctx),
+		Currency:      q.Currency.WithContext(ctx),
+		DailyDatum:    q.DailyDatum.WithContext(ctx),
+		MonitorDatum:  q.MonitorDatum.WithContext(ctx),
+		OrderEvent:    q.OrderEvent.WithContext(ctx),
+		OrderSpot:     q.OrderSpot.WithContext(ctx),
+		SpotGrid:      q.SpotGrid.WithContext(ctx),
+		SpotGridOrder: q.SpotGridOrder.WithContext(ctx),
 	}
 }
 
