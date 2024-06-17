@@ -9,9 +9,9 @@ const TableNameOrderSpot = "order_spot"
 // OrderSpot 现货订单列表
 type OrderSpot struct {
 	ID           int64   `gorm:"column:id;type:bigint(20);primaryKey;comment:主键ID" json:"id"`                                                          // 主键ID
-	OrderPid     string  `gorm:"column:order_pid;type:varchar(20);not null;comment:OK平台订单ID" json:"order_pid"`                                         // OK平台订单ID
-	OrderCid     string  `gorm:"column:order_cid;type:varchar(20);not null;comment:客户自定义订单ID" json:"order_cid"`                                        // 客户自定义订单ID
-	UserID       int64   `gorm:"column:user_id;type:int(11);not null;default:10000;comment:用户ID" json:"user_id"`                                       // 用户ID
+	OrderPid     string  `gorm:"column:order_pid;type:varchar(22);not null;comment:OK平台订单ID" json:"order_pid"`                                         // OK平台订单ID
+	OrderCid     string  `gorm:"column:order_cid;type:varchar(18);not null;comment:客户自定义订单ID" json:"order_cid"`                                        // 客户自定义订单ID
+	UserID       int64   `gorm:"column:user_id;type:int(10);not null;default:10000;comment:用户ID" json:"user_id"`                                       // 用户ID
 	CurrencyID   string  `gorm:"column:currency_id;type:varchar(10);not null;comment:币种ID" json:"currency_id"`                                         // 币种ID
 	Simulation   int64   `gorm:"column:simulation;type:tinyint(8);not null;default:1;comment:模拟订单: 0-全部,1-否, 2-是" json:"simulation"`                   // 模拟订单: 0-全部,1-否, 2-是
 	BuySellType  int64   `gorm:"column:buy_sell_type;type:tinyint(8);not null;comment:交易方向: 0-全部,1-买入,2-卖出" json:"buy_sell_type"`                      // 交易方向: 0-全部,1-买入,2-卖出

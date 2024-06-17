@@ -9,8 +9,8 @@ const TableNameSpotGrid = "spot_grid"
 // SpotGrid 网格列表-现货
 type SpotGrid struct {
 	ID                   int64   `gorm:"column:id;type:bigint(20);primaryKey;comment:主键ID" json:"id"`                                                                    // 主键ID
-	GridID               string  `gorm:"column:grid_id;type:varchar(20);not null;comment:网格ID" json:"grid_id"`                                                           // 网格ID
-	UserID               int64   `gorm:"column:user_id;type:int(11);not null;default:10000;comment:用户ID" json:"user_id"`                                                 // 用户ID
+	GridID               string  `gorm:"column:grid_id;type:varchar(16);not null;comment:网格ID" json:"grid_id"`                                                           // 网格ID
+	UserID               int64   `gorm:"column:user_id;type:int(10);not null;default:10000;comment:用户ID" json:"user_id"`                                                 // 用户ID
 	CurrencyID           string  `gorm:"column:currency_id;type:varchar(10);not null;comment:币种ID" json:"currency_id"`                                                   // 币种ID
 	Simulation           int64   `gorm:"column:simulation;type:tinyint(8);not null;default:1;comment:模拟订单: 0-全部,1-否, 2-是" json:"simulation"`                             // 模拟订单: 0-全部,1-否, 2-是
 	TriggerBuySellType   int64   `gorm:"column:trigger_buy_sell_type;type:tinyint(8);not null;comment:触发买卖: 0-全部,1-买入,2-卖出 3-不建仓" json:"trigger_buy_sell_type"`          // 触发买卖: 0-全部,1-买入,2-卖出 3-不建仓
