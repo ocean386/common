@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	defaultTimeout = 10 * time.Second
+	defaultTimeout = 30 * time.Second
 )
 
 func HttpDoTimeout(bProxy bool, requestBody []byte, method string, requestURI string, headers map[string]string, timeout time.Duration) ([]byte, int, error) {
@@ -35,7 +35,6 @@ func HttpDoTimeout(bProxy bool, requestBody []byte, method string, requestURI st
 		}
 	}
 
-	// time.Second * 20
 	fc := &fasthttp.Client{}
 	if bProxy == true { // 设置代理
 		proxyAddr := "127.0.0.1:10808" // 代理地址
