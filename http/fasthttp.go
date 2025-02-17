@@ -4,6 +4,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/valyala/fasthttp"
 	"net"
+	"net/url"
 	"time"
 )
 
@@ -12,7 +13,6 @@ var (
 )
 
 func HttpDoTimeout(bProxy bool, requestBody []byte, method string, requestURI string, headers map[string]string, timeout time.Duration) ([]byte, int, error) {
-
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
 
@@ -35,14 +35,46 @@ func HttpDoTimeout(bProxy bool, requestBody []byte, method string, requestURI st
 		}
 	}
 
-	fc := &fasthttp.Client{}
-	if bProxy == true { // 设置代理
-		proxyAddr := "127.0.0.1:10808" // 代理地址
-		fc = &fasthttp.Client{
-			Dial: func(addr string) (net.Conn, error) {
-				// 通过代理服务器建立连接
-				return fasthttp.Dial(proxyAddr)
-			},
+	dialer := &net.Dialer{
+		Timeout:   defaultTimeout,
+		KeepAlive: defaultTimeout,
+	}
+
+	fc := &fasthttp.Client{
+		Dial: func(addr string) (net.Conn, error) {
+			return dialer.Dial("tcp", addr)
+		},
+		MaxIdleConnDuration: 90 * time.Second,
+	}
+
+	if bProxy {
+		proxyAddr := "http://127.0.0.1:10808"
+		proxyURL, err := url.Parse(proxyAddr)
+		if err != nil {
+			return nil, 0, errors.WithStack(err)
+		}
+		fc.Dial = func(addr string) (net.Conn, error) {
+			proxyConn, err := dialer.Dial("tcp", proxyURL.Host)
+			if err != nil {
+				return nil, err
+			}
+			_, err = proxyConn.Write([]byte("CONNECT " + addr + " HTTP/1.1\r\nHost: " + addr + "\r\n\r\n"))
+			if err != nil {
+				proxyConn.Close()
+				return nil, err
+			}
+			buf := make([]byte, 1024)
+			proxyConn.SetReadDeadline(time.Now().Add(10 * time.Second))
+			n, err := proxyConn.Read(buf)
+			if err != nil {
+				proxyConn.Close()
+				return nil, err
+			}
+			if string(buf[:n])[:12] != "HTTP/1.1 200" {
+				proxyConn.Close()
+				return nil, errors.New("proxy connection failed")
+			}
+			return proxyConn, nil
 		}
 	}
 
