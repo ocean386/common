@@ -3,6 +3,7 @@ package http
 import (
 	"github.com/pkg/errors"
 	"github.com/valyala/fasthttp"
+	"net"
 	"time"
 )
 
@@ -10,7 +11,7 @@ var (
 	defaultTimeout = 10 * time.Second
 )
 
-func HttpDoTimeout(requestBody []byte, method string, requestURI string, headers map[string]string, timeout time.Duration) ([]byte, int, error) {
+func HttpDoTimeout(bProxy bool, requestBody []byte, method string, requestURI string, headers map[string]string, timeout time.Duration) ([]byte, int, error) {
 
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
@@ -36,6 +37,16 @@ func HttpDoTimeout(requestBody []byte, method string, requestURI string, headers
 
 	// time.Second * 20
 	fc := &fasthttp.Client{}
+	if bProxy == true { // 设置代理
+		proxyAddr := "127.0.0.1:10808" // 代理地址
+		fc = &fasthttp.Client{
+			Dial: func(addr string) (net.Conn, error) {
+				// 通过代理服务器建立连接
+				return fasthttp.Dial(proxyAddr)
+			},
+		}
+	}
+
 	err := fc.DoTimeout(req, resp, timeout)
 
 	var respBytes []byte
@@ -48,13 +59,13 @@ func HttpDoTimeout(requestBody []byte, method string, requestURI string, headers
 	return respBytes, statusCode, errors.WithStack(err)
 }
 
-func HttpGet(url string, headers map[string]string) ([]byte, int, error) {
+func HttpGet(bProxy bool, url string, headers map[string]string) ([]byte, int, error) {
 
-	return HttpDoTimeout(nil, fasthttp.MethodGet, url, headers, defaultTimeout)
+	return HttpDoTimeout(bProxy, nil, fasthttp.MethodGet, url, headers, defaultTimeout)
 
 }
 
-func HttpPost(url string, reqBody []byte, headers map[string]string) ([]byte, int, error) {
+func HttpPost(bProxy bool, url string, reqBody []byte, headers map[string]string) ([]byte, int, error) {
 
-	return HttpDoTimeout(reqBody, fasthttp.MethodPost, url, headers, defaultTimeout)
+	return HttpDoTimeout(bProxy, reqBody, fasthttp.MethodPost, url, headers, defaultTimeout)
 }
