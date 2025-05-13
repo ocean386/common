@@ -30,6 +30,7 @@ func newStockOrderChange(db *gorm.DB, opts ...gen.DOOption) stockOrderChange {
 	_stockOrderChange.StockCode = field.NewString(tableName, "stock_code")
 	_stockOrderChange.StockName = field.NewString(tableName, "stock_name")
 	_stockOrderChange.PlateType = field.NewInt64(tableName, "plate_type")
+	_stockOrderChange.Exchange = field.NewInt64(tableName, "exchange")
 	_stockOrderChange.ChangeTimes = field.NewInt64(tableName, "change_times")
 	_stockOrderChange.ChangeMsg = field.NewString(tableName, "change_msg")
 	_stockOrderChange.VolumeRatio = field.NewFloat64(tableName, "volume_ratio")
@@ -54,6 +55,7 @@ type stockOrderChange struct {
 	StockCode    field.String  // 股票代码
 	StockName    field.String  // 股票名称
 	PlateType    field.Int64   // 盘股类型(0-全部,1-微小盘,2-小盘,3-中盘,4-大盘)
+	Exchange     field.Int64   // 交易所(0-全部,1-深圳,2-上海,3-北京)
 	ChangeTimes  field.Int64   // 异动次数
 	ChangeMsg    field.String  // 异动消息
 	VolumeRatio  field.Float64 // 量比
@@ -83,6 +85,7 @@ func (s *stockOrderChange) updateTableName(table string) *stockOrderChange {
 	s.StockCode = field.NewString(table, "stock_code")
 	s.StockName = field.NewString(table, "stock_name")
 	s.PlateType = field.NewInt64(table, "plate_type")
+	s.Exchange = field.NewInt64(table, "exchange")
 	s.ChangeTimes = field.NewInt64(table, "change_times")
 	s.ChangeMsg = field.NewString(table, "change_msg")
 	s.VolumeRatio = field.NewFloat64(table, "volume_ratio")
@@ -109,10 +112,11 @@ func (s *stockOrderChange) GetFieldByName(fieldName string) (field.OrderExpr, bo
 }
 
 func (s *stockOrderChange) fillFieldMap() {
-	s.fieldMap = make(map[string]field.Expr, 13)
+	s.fieldMap = make(map[string]field.Expr, 14)
 	s.fieldMap["stock_code"] = s.StockCode
 	s.fieldMap["stock_name"] = s.StockName
 	s.fieldMap["plate_type"] = s.PlateType
+	s.fieldMap["exchange"] = s.Exchange
 	s.fieldMap["change_times"] = s.ChangeTimes
 	s.fieldMap["change_msg"] = s.ChangeMsg
 	s.fieldMap["volume_ratio"] = s.VolumeRatio

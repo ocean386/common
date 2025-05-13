@@ -15,6 +15,7 @@ type StockOrderChange struct {
 	StockCode    string    `gorm:"column:stock_code;type:varchar(10);primaryKey;comment:股票代码" json:"stock_code"`                         // 股票代码
 	StockName    string    `gorm:"column:stock_name;type:varchar(10);not null;comment:股票名称" json:"stock_name"`                           // 股票名称
 	PlateType    int64     `gorm:"column:plate_type;type:tinyint(4);not null;comment:盘股类型(0-全部,1-微小盘,2-小盘,3-中盘,4-大盘)" json:"plate_type"` // 盘股类型(0-全部,1-微小盘,2-小盘,3-中盘,4-大盘)
+	Exchange     int64     `gorm:"column:exchange;type:tinyint(4);not null;comment:交易所(0-全部,1-深圳,2-上海,3-北京)" json:"exchange"`            // 交易所(0-全部,1-深圳,2-上海,3-北京)
 	ChangeTimes  int64     `gorm:"column:change_times;type:tinyint(4);not null;comment:异动次数" json:"change_times"`                        // 异动次数
 	ChangeMsg    string    `gorm:"column:change_msg;type:varchar(8000);not null;comment:异动消息" json:"change_msg"`                         // 异动消息
 	VolumeRatio  float64   `gorm:"column:volume_ratio;type:decimal(5,2);not null;default:0.00;comment:量比" json:"volume_ratio"`           // 量比
