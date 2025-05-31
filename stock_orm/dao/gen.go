@@ -17,6 +17,8 @@ import (
 
 var (
 	Q                  = new(Query)
+	CryptMarket        *cryptMarket
+	CryptRank          *cryptRank
 	Stock              *stock
 	StockConcept       *stockConcept
 	StockConceptList   *stockConceptList
@@ -35,6 +37,8 @@ var (
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	CryptMarket = &Q.CryptMarket
+	CryptRank = &Q.CryptRank
 	Stock = &Q.Stock
 	StockConcept = &Q.StockConcept
 	StockConceptList = &Q.StockConceptList
@@ -54,6 +58,8 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:                 db,
+		CryptMarket:        newCryptMarket(db, opts...),
+		CryptRank:          newCryptRank(db, opts...),
 		Stock:              newStock(db, opts...),
 		StockConcept:       newStockConcept(db, opts...),
 		StockConceptList:   newStockConceptList(db, opts...),
@@ -74,6 +80,8 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 type Query struct {
 	db *gorm.DB
 
+	CryptMarket        cryptMarket
+	CryptRank          cryptRank
 	Stock              stock
 	StockConcept       stockConcept
 	StockConceptList   stockConceptList
@@ -95,6 +103,8 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:                 db,
+		CryptMarket:        q.CryptMarket.clone(db),
+		CryptRank:          q.CryptRank.clone(db),
 		Stock:              q.Stock.clone(db),
 		StockConcept:       q.StockConcept.clone(db),
 		StockConceptList:   q.StockConceptList.clone(db),
@@ -123,6 +133,8 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:                 db,
+		CryptMarket:        q.CryptMarket.replaceDB(db),
+		CryptRank:          q.CryptRank.replaceDB(db),
 		Stock:              q.Stock.replaceDB(db),
 		StockConcept:       q.StockConcept.replaceDB(db),
 		StockConceptList:   q.StockConceptList.replaceDB(db),
@@ -141,6 +153,8 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 }
 
 type queryCtx struct {
+	CryptMarket        ICryptMarketDo
+	CryptRank          ICryptRankDo
 	Stock              IStockDo
 	StockConcept       IStockConceptDo
 	StockConceptList   IStockConceptListDo
@@ -159,6 +173,8 @@ type queryCtx struct {
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
+		CryptMarket:        q.CryptMarket.WithContext(ctx),
+		CryptRank:          q.CryptRank.WithContext(ctx),
 		Stock:              q.Stock.WithContext(ctx),
 		StockConcept:       q.StockConcept.WithContext(ctx),
 		StockConceptList:   q.StockConceptList.WithContext(ctx),
