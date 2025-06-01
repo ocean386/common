@@ -32,7 +32,8 @@ func newCryptRank(db *gorm.DB, opts ...gen.DOOption) cryptRank {
 	_cryptRank.RankType = field.NewInt64(tableName, "rank_type")
 	_cryptRank.CryptPrice = field.NewFloat64(tableName, "crypt_price")
 	_cryptRank.CryptValue = field.NewFloat64(tableName, "crypt_value")
-	_cryptRank.Volume24h = field.NewString(tableName, "volume_24h")
+	_cryptRank.Volume24h = field.NewFloat64(tableName, "volume_24h")
+	_cryptRank.TurnOver24h = field.NewFloat64(tableName, "turn_over_24h")
 	_cryptRank.RankID = field.NewInt64(tableName, "rank_id")
 	_cryptRank.CreatedAt = field.NewTime(tableName, "created_at")
 	_cryptRank.UpdatedAt = field.NewTime(tableName, "updated_at")
@@ -46,16 +47,17 @@ func newCryptRank(db *gorm.DB, opts ...gen.DOOption) cryptRank {
 type cryptRank struct {
 	cryptRankDo
 
-	ALL        field.Asterisk
-	ID         field.Int64   // 主键ID
-	CryptName  field.String  // 虚拟币名称
-	RankType   field.Int64   // 排行榜类型: 0-全部 1-热门榜 2-涨幅榜 3-跌幅榜 4-新币榜 5-飙升榜 6-市值榜 7-成交榜
-	CryptPrice field.Float64 // 价格
-	CryptValue field.Float64 // 涨跌幅度
-	Volume24h  field.String  // 成交量-24小时
-	RankID     field.Int64   // 排名ID
-	CreatedAt  field.Time    // 创建时间
-	UpdatedAt  field.Time    // 更新时间
+	ALL         field.Asterisk
+	ID          field.Int64   // 主键ID
+	CryptName   field.String  // 虚拟币名称
+	RankType    field.Int64   // 排行榜类型: 0-全部 1-热门榜 2-涨幅榜 3-跌幅榜 4-新币榜 5-飙升榜 6-市值榜 7-成交榜
+	CryptPrice  field.Float64 // 价格
+	CryptValue  field.Float64 // 涨跌幅度
+	Volume24h   field.Float64 // 成交量-24小时
+	TurnOver24h field.Float64 // 成交金额-24小时
+	RankID      field.Int64   // 排名ID
+	CreatedAt   field.Time    // 创建时间
+	UpdatedAt   field.Time    // 更新时间
 
 	fieldMap map[string]field.Expr
 }
@@ -77,7 +79,8 @@ func (c *cryptRank) updateTableName(table string) *cryptRank {
 	c.RankType = field.NewInt64(table, "rank_type")
 	c.CryptPrice = field.NewFloat64(table, "crypt_price")
 	c.CryptValue = field.NewFloat64(table, "crypt_value")
-	c.Volume24h = field.NewString(table, "volume_24h")
+	c.Volume24h = field.NewFloat64(table, "volume_24h")
+	c.TurnOver24h = field.NewFloat64(table, "turn_over_24h")
 	c.RankID = field.NewInt64(table, "rank_id")
 	c.CreatedAt = field.NewTime(table, "created_at")
 	c.UpdatedAt = field.NewTime(table, "updated_at")
@@ -97,13 +100,14 @@ func (c *cryptRank) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (c *cryptRank) fillFieldMap() {
-	c.fieldMap = make(map[string]field.Expr, 9)
+	c.fieldMap = make(map[string]field.Expr, 10)
 	c.fieldMap["id"] = c.ID
 	c.fieldMap["crypt_name"] = c.CryptName
 	c.fieldMap["rank_type"] = c.RankType
 	c.fieldMap["crypt_price"] = c.CryptPrice
 	c.fieldMap["crypt_value"] = c.CryptValue
 	c.fieldMap["volume_24h"] = c.Volume24h
+	c.fieldMap["turn_over_24h"] = c.TurnOver24h
 	c.fieldMap["rank_id"] = c.RankID
 	c.fieldMap["created_at"] = c.CreatedAt
 	c.fieldMap["updated_at"] = c.UpdatedAt
