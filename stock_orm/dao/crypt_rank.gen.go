@@ -50,7 +50,7 @@ type cryptRank struct {
 	ALL         field.Asterisk
 	ID          field.Int64   // 主键ID
 	CryptName   field.String  // 虚拟币名称
-	RankType    field.Int64   // 排行榜类型: 0-全部 1-热门榜 2-涨幅榜 3-跌幅榜 4-新币榜 5-飙升榜 6-市值榜 7-成交榜
+	RankType    field.Int64   // 排行榜类型: 0-全部 1-热门榜 2-涨幅榜 3-跌幅榜 4-市值榜 5-成交榜 6-飙升榜 7-新币榜
 	CryptPrice  field.Float64 // 价格
 	CryptValue  field.Float64 // 涨跌幅度
 	Volume24h   field.Float64 // 成交量-24小时

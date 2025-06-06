@@ -34,6 +34,13 @@ func newCryptMarket(db *gorm.DB, opts ...gen.DOOption) cryptMarket {
 	_cryptMarket.TriggerValue = field.NewFloat64(tableName, "trigger_value")
 	_cryptMarket.VolumeUsd = field.NewFloat64(tableName, "volume_usd")
 	_cryptMarket.TriggerTime = field.NewTime(tableName, "trigger_time")
+	_cryptMarket.RankType1 = field.NewInt64(tableName, "rank_type_1")
+	_cryptMarket.RankType2 = field.NewInt64(tableName, "rank_type_2")
+	_cryptMarket.RankType3 = field.NewInt64(tableName, "rank_type_3")
+	_cryptMarket.RankType4 = field.NewInt64(tableName, "rank_type_4")
+	_cryptMarket.RankType5 = field.NewInt64(tableName, "rank_type_5")
+	_cryptMarket.RankType6 = field.NewInt64(tableName, "rank_type_6")
+	_cryptMarket.RankType7 = field.NewInt64(tableName, "rank_type_7")
 
 	_cryptMarket.fillFieldMap()
 
@@ -52,6 +59,13 @@ type cryptMarket struct {
 	TriggerValue field.Float64 // 涨跌幅度/成交量
 	VolumeUsd    field.Float64 // 成交金额
 	TriggerTime  field.Time    // 触发时间
+	RankType1    field.Int64   // 热门榜
+	RankType2    field.Int64   // 涨幅榜
+	RankType3    field.Int64   // 跌幅榜
+	RankType4    field.Int64   // 市值榜
+	RankType5    field.Int64   // 成交榜
+	RankType6    field.Int64   // 飙升榜
+	RankType7    field.Int64   // 新币榜
 
 	fieldMap map[string]field.Expr
 }
@@ -75,6 +89,13 @@ func (c *cryptMarket) updateTableName(table string) *cryptMarket {
 	c.TriggerValue = field.NewFloat64(table, "trigger_value")
 	c.VolumeUsd = field.NewFloat64(table, "volume_usd")
 	c.TriggerTime = field.NewTime(table, "trigger_time")
+	c.RankType1 = field.NewInt64(table, "rank_type_1")
+	c.RankType2 = field.NewInt64(table, "rank_type_2")
+	c.RankType3 = field.NewInt64(table, "rank_type_3")
+	c.RankType4 = field.NewInt64(table, "rank_type_4")
+	c.RankType5 = field.NewInt64(table, "rank_type_5")
+	c.RankType6 = field.NewInt64(table, "rank_type_6")
+	c.RankType7 = field.NewInt64(table, "rank_type_7")
 
 	c.fillFieldMap()
 
@@ -91,7 +112,7 @@ func (c *cryptMarket) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (c *cryptMarket) fillFieldMap() {
-	c.fieldMap = make(map[string]field.Expr, 7)
+	c.fieldMap = make(map[string]field.Expr, 14)
 	c.fieldMap["id"] = c.ID
 	c.fieldMap["crypt_name"] = c.CryptName
 	c.fieldMap["event_type"] = c.EventType
@@ -99,6 +120,13 @@ func (c *cryptMarket) fillFieldMap() {
 	c.fieldMap["trigger_value"] = c.TriggerValue
 	c.fieldMap["volume_usd"] = c.VolumeUsd
 	c.fieldMap["trigger_time"] = c.TriggerTime
+	c.fieldMap["rank_type_1"] = c.RankType1
+	c.fieldMap["rank_type_2"] = c.RankType2
+	c.fieldMap["rank_type_3"] = c.RankType3
+	c.fieldMap["rank_type_4"] = c.RankType4
+	c.fieldMap["rank_type_5"] = c.RankType5
+	c.fieldMap["rank_type_6"] = c.RankType6
+	c.fieldMap["rank_type_7"] = c.RankType7
 }
 
 func (c cryptMarket) clone(db *gorm.DB) cryptMarket {

@@ -19,6 +19,13 @@ type CryptMarket struct {
 	TriggerValue float64   `gorm:"column:trigger_value;type:decimal(6,2);not null;default:0.00;comment:涨跌幅度/成交量" json:"trigger_value"`                          // 涨跌幅度/成交量
 	VolumeUsd    float64   `gorm:"column:volume_usd;type:decimal(12,0);not null;default:0;comment:成交金额" json:"volume_usd"`                                      // 成交金额
 	TriggerTime  time.Time `gorm:"column:trigger_time;type:timestamp;not null;default:current_timestamp();comment:触发时间" json:"trigger_time"`                    // 触发时间
+	RankType1    int64     `gorm:"column:rank_type_1;type:int(10);not null;comment:热门榜" json:"rank_type_1"`                                                     // 热门榜
+	RankType2    int64     `gorm:"column:rank_type_2;type:int(10);not null;comment:涨幅榜" json:"rank_type_2"`                                                     // 涨幅榜
+	RankType3    int64     `gorm:"column:rank_type_3;type:int(10);not null;comment:跌幅榜" json:"rank_type_3"`                                                     // 跌幅榜
+	RankType4    int64     `gorm:"column:rank_type_4;type:int(10);not null;comment:市值榜" json:"rank_type_4"`                                                     // 市值榜
+	RankType5    int64     `gorm:"column:rank_type_5;type:int(10);not null;comment:成交榜" json:"rank_type_5"`                                                     // 成交榜
+	RankType6    int64     `gorm:"column:rank_type_6;type:int(10);not null;comment:飙升榜" json:"rank_type_6"`                                                     // 飙升榜
+	RankType7    int64     `gorm:"column:rank_type_7;type:int(10);not null;comment:新币榜" json:"rank_type_7"`                                                     // 新币榜
 }
 
 // TableName CryptMarket's table name

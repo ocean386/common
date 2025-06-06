@@ -14,7 +14,7 @@ const TableNameCryptRank = "crypt_rank"
 type CryptRank struct {
 	ID          int64     `gorm:"column:id;type:bigint(20);primaryKey;comment:主键ID" json:"id"`                                                              // 主键ID
 	CryptName   string    `gorm:"column:crypt_name;type:varchar(10);not null;comment:虚拟币名称" json:"crypt_name"`                                              // 虚拟币名称
-	RankType    int64     `gorm:"column:rank_type;type:tinyint(4);not null;comment:排行榜类型: 0-全部 1-热门榜 2-涨幅榜 3-跌幅榜 4-新币榜 5-飙升榜 6-市值榜 7-成交榜" json:"rank_type"` // 排行榜类型: 0-全部 1-热门榜 2-涨幅榜 3-跌幅榜 4-新币榜 5-飙升榜 6-市值榜 7-成交榜
+	RankType    int64     `gorm:"column:rank_type;type:tinyint(4);not null;comment:排行榜类型: 0-全部 1-热门榜 2-涨幅榜 3-跌幅榜 4-市值榜 5-成交榜 6-飙升榜 7-新币榜" json:"rank_type"` // 排行榜类型: 0-全部 1-热门榜 2-涨幅榜 3-跌幅榜 4-市值榜 5-成交榜 6-飙升榜 7-新币榜
 	CryptPrice  float64   `gorm:"column:crypt_price;type:decimal(20,8);not null;default:0.00000000;comment:价格" json:"crypt_price"`                          // 价格
 	CryptValue  float64   `gorm:"column:crypt_value;type:decimal(10,4);not null;default:0.0000;comment:涨跌幅度" json:"crypt_value"`                            // 涨跌幅度
 	Volume24h   float64   `gorm:"column:volume_24h;type:decimal(12,0);not null;default:0;comment:成交量-24小时" json:"volume_24h"`                               // 成交量-24小时
