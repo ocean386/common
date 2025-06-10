@@ -31,7 +31,7 @@ func newCryptMarket(db *gorm.DB, opts ...gen.DOOption) cryptMarket {
 	_cryptMarket.CryptName = field.NewString(tableName, "crypt_name")
 	_cryptMarket.EventType = field.NewInt64(tableName, "event_type")
 	_cryptMarket.TriggerPrice = field.NewFloat64(tableName, "trigger_price")
-	_cryptMarket.TriggerValue = field.NewFloat64(tableName, "trigger_value")
+	_cryptMarket.TriggerValue = field.NewString(tableName, "trigger_value")
 	_cryptMarket.VolumeUsd = field.NewFloat64(tableName, "volume_usd")
 	_cryptMarket.TriggerTime = field.NewTime(tableName, "trigger_time")
 	_cryptMarket.RankType1 = field.NewInt64(tableName, "rank_type_1")
@@ -56,7 +56,7 @@ type cryptMarket struct {
 	CryptName    field.String  // 虚拟币名称
 	EventType    field.Int64   // 市场类型: 0-全部 1-5分钟涨幅 2-5分钟跌幅 3-大单买入 4-大单卖出 5-异动涨幅 6-异动跌幅
 	TriggerPrice field.Float64 // 触发价格
-	TriggerValue field.Float64 // 涨跌幅度/成交量
+	TriggerValue field.String  // 涨跌幅度/成交量
 	VolumeUsd    field.Float64 // 成交金额
 	TriggerTime  field.Time    // 触发时间
 	RankType1    field.Int64   // 热门榜
@@ -86,7 +86,7 @@ func (c *cryptMarket) updateTableName(table string) *cryptMarket {
 	c.CryptName = field.NewString(table, "crypt_name")
 	c.EventType = field.NewInt64(table, "event_type")
 	c.TriggerPrice = field.NewFloat64(table, "trigger_price")
-	c.TriggerValue = field.NewFloat64(table, "trigger_value")
+	c.TriggerValue = field.NewString(table, "trigger_value")
 	c.VolumeUsd = field.NewFloat64(table, "volume_usd")
 	c.TriggerTime = field.NewTime(table, "trigger_time")
 	c.RankType1 = field.NewInt64(table, "rank_type_1")

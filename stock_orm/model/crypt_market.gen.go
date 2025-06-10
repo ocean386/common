@@ -16,7 +16,7 @@ type CryptMarket struct {
 	CryptName    string    `gorm:"column:crypt_name;type:varchar(10);not null;comment:虚拟币名称" json:"crypt_name"`                                                 // 虚拟币名称
 	EventType    int64     `gorm:"column:event_type;type:tinyint(4);not null;comment:市场类型: 0-全部 1-5分钟涨幅 2-5分钟跌幅 3-大单买入 4-大单卖出 5-异动涨幅 6-异动跌幅" json:"event_type"` // 市场类型: 0-全部 1-5分钟涨幅 2-5分钟跌幅 3-大单买入 4-大单卖出 5-异动涨幅 6-异动跌幅
 	TriggerPrice float64   `gorm:"column:trigger_price;type:decimal(20,8);not null;default:0.00000000;comment:触发价格" json:"trigger_price"`                       // 触发价格
-	TriggerValue float64   `gorm:"column:trigger_value;type:decimal(6,2);not null;default:0.00;comment:涨跌幅度/成交量" json:"trigger_value"`                          // 涨跌幅度/成交量
+	TriggerValue string    `gorm:"column:trigger_value;type:varchar(10);not null;comment:涨跌幅度/成交量" json:"trigger_value"`                                        // 涨跌幅度/成交量
 	VolumeUsd    float64   `gorm:"column:volume_usd;type:decimal(12,0);not null;default:0;comment:成交金额" json:"volume_usd"`                                      // 成交金额
 	TriggerTime  time.Time `gorm:"column:trigger_time;type:timestamp;not null;default:current_timestamp();comment:触发时间" json:"trigger_time"`                    // 触发时间
 	RankType1    int64     `gorm:"column:rank_type_1;type:int(10);not null;comment:热门榜" json:"rank_type_1"`                                                     // 热门榜
