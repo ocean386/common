@@ -12,10 +12,11 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"github.com/pkg/errors"
 	"reflect"
 	"sort"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 // RsaPrivateSign RSA 签名-私钥
@@ -130,7 +131,7 @@ func GetSortFieldAsc(obj interface{}) (byteParam []byte) {
 			continue
 		}
 
-		// 如果字段值为零值，则不添加到 map 中
+		// 如果字段值为零值,则不添加到 map 中
 		if reflect.DeepEqual(field.Interface(), reflect.Zero(field.Type()).Interface()) {
 			continue
 		}

@@ -1,11 +1,12 @@
 package http
 
 import (
-	"github.com/pkg/errors"
-	"github.com/valyala/fasthttp"
 	"net"
 	"net/url"
 	"time"
+
+	"github.com/pkg/errors"
+	"github.com/valyala/fasthttp"
 )
 
 var (

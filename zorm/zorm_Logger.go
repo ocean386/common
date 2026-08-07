@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"strings"
-	"time"
 )
 
 type GormLogger struct {
@@ -72,7 +73,7 @@ func (l *GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql 
 }
 
 // MicrosecondsStr 将 time.Duration 类型（nano seconds 为单位）
-// 输出为小数点后 3 位的 ms （microsecond 毫秒，千分之一秒）
+// 输出为小数点后 3 位的 ms （microsecond 毫秒,千分之一秒）
 func MicrosecondsStr(elapsed time.Duration) string {
 	return fmt.Sprintf("%.3fms", float64(elapsed.Nanoseconds())/1e6)
 }

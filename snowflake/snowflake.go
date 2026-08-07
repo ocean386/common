@@ -3,10 +3,11 @@ package snowflake
 import (
 	"errors"
 	"fmt"
-	"github.com/zeromicro/go-zero/core/stores/redis"
 	"net"
 	"sync"
 	"time"
+
+	"github.com/zeromicro/go-zero/core/stores/redis"
 )
 
 type SnowFlakeIdWorker struct {
@@ -80,9 +81,9 @@ func (p *SnowFlakeIdWorker) InitSnowFlake(dataCenterId int64, workerId int64) {
 	p.workerIdBits = 6 //8
 	// 数据标识ID所占的位数
 	p.dataCenterIdBits = 1 //5
-	// 支持的最大机器ID，最大是31
+	// 支持的最大机器ID,最大是31
 	p.maxWorkerId = -1 ^ (-1 << p.workerIdBits)
-	// 支持的最大机房ID，最大是 31
+	// 支持的最大机房ID,最大是 31
 	p.maxDataCenterId = -1 ^ (-1 << p.dataCenterIdBits)
 	// 序列在ID中占的位数
 	p.sequenceBits = 9
@@ -92,7 +93,7 @@ func (p *SnowFlakeIdWorker) InitSnowFlake(dataCenterId int64, workerId int64) {
 	p.dataCenterIdShift = p.sequenceBits + p.workerIdBits
 	// 时间截向左移22位
 	p.timestampLeftShift = p.sequenceBits + p.workerIdBits + p.dataCenterIdBits
-	// 生成序列的掩码最大值，最大为4095
+	// 生成序列的掩码最大值,最大为4095
 	p.sequenceMask = -1 ^ (-1 << p.sequenceBits)
 
 	if workerId > p.maxWorkerId || workerId < 0 {
@@ -116,21 +117,21 @@ func (p *SnowFlakeIdWorker) nextId() int64 {
 	defer p.lock.Unlock()
 
 	timestamp := p.timeGen()
-	// 如果当前时间小于上一次 ID 生成的时间戳，说明发生时钟回拨，为保证ID不重复抛出异常。
+	// 如果当前时间小于上一次 ID 生成的时间戳,说明发生时钟回拨,为保证ID不重复抛出异常。
 	if timestamp < p.lastTimestamp {
 		panic(errors.New(fmt.Sprintf("Clock moved backwards. Refusing to generate id for %d milliseconds", p.lastTimestamp-timestamp)))
 	}
 
 	if p.lastTimestamp == timestamp {
-		// 同一时间生成的，则序号+1
+		// 同一时间生成的,则序号+1
 		p.sequence = (p.sequence + 1) & p.sequenceMask
 		// 毫秒内序列溢出：超过最大值
 		if p.sequence == 0 {
-			// 阻塞到下一个毫秒，获得新的时间戳
+			// 阻塞到下一个毫秒,获得新的时间戳
 			timestamp = p.tilNextMillis(p.lastTimestamp)
 		}
 	} else {
-		// 时间戳改变，序列重置
+		// 时间戳改变,序列重置
 		p.sequence = 0
 	}
 	// 保存本次的时间戳

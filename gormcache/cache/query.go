@@ -3,21 +3,22 @@ package cache
 import (
 	"errors"
 	"fmt"
+	"reflect"
+	"strconv"
+	"strings"
+	"sync"
+
 	"github.com/hashicorp/go-multierror"
 	"github.com/ocean386/common/gormcache/config"
 	"github.com/ocean386/common/gormcache/storage"
 	"github.com/ocean386/common/gormcache/util"
 	"gorm.io/gorm"
 	"gorm.io/gorm/callbacks"
-	"reflect"
-	"strconv"
-	"strings"
-	"sync"
 )
 
 // singleFlight 流程设计
-// 根据key lock住，等待结果。query before之前，会先判断是否有key，如果有，就等待结果，如果没有，就执行query before，然后执行query，然后把结果放到key里面，然后unlock，然后返回结果。
-// 等待完成后 进行一手返回 然后err设置为err.singleflightHit，afterQuery结束的时候进行一手检查
+// 根据key lock住,等待结果。query before之前,会先判断是否有key,如果有,就等待结果,如果没有,就执行query before,然后执行query,然后把结果放到key里面,然后unlock,然后返回结果。
+// 等待完成后 进行一手返回 然后err设置为err.singleflightHit,afterQuery结束的时候进行一手检查
 
 func newQueryHandler(c *Gorm2Cache) *queryHandler {
 	return &queryHandler{cache: c}
@@ -90,7 +91,7 @@ func (h *queryHandler) BeforeQuery() func(db *gorm.DB) {
 				}
 				hit = true
 				db.RowsAffected = c.rowsAffected
-				db.Error = multierror.Append(util.SingleFlightHit) // 为保证后续流程不走，必须设一个error
+				db.Error = multierror.Append(util.SingleFlightHit) // 为保证后续流程不走,必须设一个error
 				if c.err != nil {
 					db.Error = multierror.Append(db.Error, c.err)
 				}
@@ -226,7 +227,7 @@ func (h *queryHandler) AfterQuery() func(db *gorm.DB) {
 			if db.Error == nil {
 				destValue := reflect.Indirect(reflect.ValueOf(db.Statement.Dest))
 				// 如果是结构体应该能提主键出来
-				// 如果是数组需要判断内部元素是不是结构体，不是结构体的都提不了主键
+				// 如果是数组需要判断内部元素是不是结构体,不是结构体的都提不了主键
 				if destValue.Kind() == reflect.Slice || destValue.Kind() == reflect.Array {
 					if (destValue.Type().Elem().Kind() == reflect.Pointer && destValue.Type().Elem().Elem().Kind() != reflect.Struct) ||
 						(destValue.Type().Elem().Kind() != reflect.Pointer && destValue.Type().Elem().Kind() != reflect.Struct) {
