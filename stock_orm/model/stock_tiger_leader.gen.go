@@ -12,7 +12,7 @@ const TableNameStockTigerLeader = "stock_tiger_leader"
 
 // StockTigerLeader 股票列表-龙虎榜
 type StockTigerLeader struct {
-	ID                     int64     `gorm:"column:id;type:bigint(20);primaryKey;comment:主键ID" json:"id"`                                                          // 主键ID
+	ID                     int64     `gorm:"column:id;type:bigint(20);primaryKey;autoIncrement:true;comment:主键ID" json:"id"`                                       // 主键ID
 	StockCode              string    `gorm:"column:stock_code;type:varchar(10);not null;comment:股票代码" json:"stock_code"`                                           // 股票代码
 	StockName              string    `gorm:"column:stock_name;type:varchar(10);not null;comment:股票名称" json:"stock_name"`                                           // 股票名称
 	CirculatingMarketValue float64   `gorm:"column:circulating_market_value;type:decimal(8,2);not null;default:0.00;comment:流通市值" json:"circulating_market_value"` // 流通市值
@@ -32,9 +32,9 @@ type StockTigerLeader struct {
 	HotMoneyName           string    `gorm:"column:hot_money_name;type:varchar(50);not null;comment:游资名称" json:"hot_money_name"`                                   // 游资名称
 	HotTlabel              string    `gorm:"column:hot_tlabel;type:varchar(50);not null;comment:游资标签" json:"hot_tlabel"`                                           // 游资标签
 	ContinuousLeaderTimes  int64     `gorm:"column:continuous_leader_times;type:tinyint(4);not null;comment:连续上榜次数" json:"continuous_leader_times"`                // 连续上榜次数
-	Last1monthLeaderTimes  int64     `gorm:"column:last_1month_leader_times;type:tinyint(4);not null;comment:近1个月上榜次数" json:"last_1month_leader_times"`            // 近1个月上榜次数
-	Last3monthsLeaderTimes int64     `gorm:"column:last_3months_leader_times;type:tinyint(4);not null;comment:近3个月上榜次数" json:"last_3months_leader_times"`          // 近3个月上榜次数
-	Last6monthsLeaderTimes int64     `gorm:"column:last_6months_leader_times;type:tinyint(4);not null;comment:近6个月上榜次数" json:"last_6months_leader_times"`          // 近6个月上榜次数
+	Last1MonthLeaderTimes  int64     `gorm:"column:last_1month_leader_times;type:tinyint(4);not null;comment:近1个月上榜次数" json:"last_1month_leader_times"`            // 近1个月上榜次数
+	Last3MonthsLeaderTimes int64     `gorm:"column:last_3months_leader_times;type:tinyint(4);not null;comment:近3个月上榜次数" json:"last_3months_leader_times"`          // 近3个月上榜次数
+	Last6MonthsLeaderTimes int64     `gorm:"column:last_6months_leader_times;type:tinyint(4);not null;comment:近6个月上榜次数" json:"last_6months_leader_times"`          // 近6个月上榜次数
 	AnnualLeaderTimes      int64     `gorm:"column:annual_leader_times;type:tinyint(4);not null;comment:近一年上榜次数" json:"annual_leader_times"`                       // 近一年上榜次数
 	Industry               string    `gorm:"column:industry;type:varchar(50);not null;comment:行业" json:"industry"`                                                 // 行业
 	IndustryCode           string    `gorm:"column:industry_code;type:varchar(10);not null;comment:行业代码" json:"industry_code"`                                     // 行业代码

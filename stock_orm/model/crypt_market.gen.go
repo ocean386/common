@@ -12,7 +12,7 @@ const TableNameCryptMarket = "crypt_market"
 
 // CryptMarket 虚拟币市场异动
 type CryptMarket struct {
-	ID           int64     `gorm:"column:id;type:bigint(20);primaryKey;comment:主键ID" json:"id"`                                                                 // 主键ID
+	ID           int64     `gorm:"column:id;type:bigint(20);primaryKey;autoIncrement:true;comment:主键ID" json:"id"`                                              // 主键ID
 	CryptName    string    `gorm:"column:crypt_name;type:varchar(10);not null;comment:虚拟币名称" json:"crypt_name"`                                                 // 虚拟币名称
 	EventType    int64     `gorm:"column:event_type;type:tinyint(4);not null;comment:市场类型: 0-全部 1-5分钟涨幅 2-5分钟跌幅 3-大单买入 4-大单卖出 5-异动涨幅 6-异动跌幅" json:"event_type"` // 市场类型: 0-全部 1-5分钟涨幅 2-5分钟跌幅 3-大单买入 4-大单卖出 5-异动涨幅 6-异动跌幅
 	TriggerPrice float64   `gorm:"column:trigger_price;type:decimal(20,8);not null;default:0.00000000;comment:触发价格" json:"trigger_price"`                       // 触发价格

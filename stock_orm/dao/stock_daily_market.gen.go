@@ -6,6 +6,7 @@ package dao
 
 import (
 	"context"
+	"database/sql"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -29,6 +30,7 @@ func newStockDailyMarket(db *gorm.DB, opts ...gen.DOOption) stockDailyMarket {
 	_stockDailyMarket.ALL = field.NewAsterisk(tableName)
 	_stockDailyMarket.StockCode = field.NewString(tableName, "stock_code")
 	_stockDailyMarket.StockName = field.NewString(tableName, "stock_name")
+	_stockDailyMarket.PlateType = field.NewInt64(tableName, "plate_type")
 	_stockDailyMarket.Turnover = field.NewFloat64(tableName, "turnover")
 	_stockDailyMarket.VolumeRatio = field.NewFloat64(tableName, "volume_ratio")
 	_stockDailyMarket.TurnoverRate = field.NewFloat64(tableName, "turnover_rate")
@@ -38,11 +40,11 @@ func newStockDailyMarket(db *gorm.DB, opts ...gen.DOOption) stockDailyMarket {
 	_stockDailyMarket.OpeningPrice = field.NewFloat64(tableName, "opening_price")
 	_stockDailyMarket.HighestPrice = field.NewFloat64(tableName, "highest_price")
 	_stockDailyMarket.LowestPrice = field.NewFloat64(tableName, "lowest_price")
-	_stockDailyMarket.IncreaseRate5d = field.NewFloat64(tableName, "increase_rate_5d")
-	_stockDailyMarket.IncreaseRate10d = field.NewFloat64(tableName, "increase_rate_10d")
-	_stockDailyMarket.IncreaseRate20d = field.NewFloat64(tableName, "increase_rate_20d")
-	_stockDailyMarket.Highest52w = field.NewFloat64(tableName, "highest_52w")
-	_stockDailyMarket.Lowest52w = field.NewFloat64(tableName, "lowest_52w")
+	_stockDailyMarket.IncreaseRate5D = field.NewFloat64(tableName, "increase_rate_5d")
+	_stockDailyMarket.IncreaseRate10D = field.NewFloat64(tableName, "increase_rate_10d")
+	_stockDailyMarket.IncreaseRate20D = field.NewFloat64(tableName, "increase_rate_20d")
+	_stockDailyMarket.Highest52W = field.NewFloat64(tableName, "highest_52w")
+	_stockDailyMarket.Lowest52W = field.NewFloat64(tableName, "lowest_52w")
 	_stockDailyMarket.Volume = field.NewFloat64(tableName, "volume")
 	_stockDailyMarket.KlineType = field.NewInt64(tableName, "kline_type")
 	_stockDailyMarket.TradingDate = field.NewTime(tableName, "trading_date")
@@ -60,6 +62,7 @@ type stockDailyMarket struct {
 	ALL             field.Asterisk
 	StockCode       field.String  // 股票代码
 	StockName       field.String  // 股票名称
+	PlateType       field.Int64   // 盘股类型(0-全部,1-微小盘,2-小盘,3-中盘,4-大盘)
 	Turnover        field.Float64 // 成交额(亿)
 	VolumeRatio     field.Float64 // 量比
 	TurnoverRate    field.Float64 // 换手
@@ -69,11 +72,11 @@ type stockDailyMarket struct {
 	OpeningPrice    field.Float64 // 开盘
 	HighestPrice    field.Float64 // 最高
 	LowestPrice     field.Float64 // 最低
-	IncreaseRate5d  field.Float64 // 5日涨幅
-	IncreaseRate10d field.Float64 // 10日涨幅
-	IncreaseRate20d field.Float64 // 20日涨幅
-	Highest52w      field.Float64 // 52周最高价
-	Lowest52w       field.Float64 // 52周最低价
+	IncreaseRate5D  field.Float64 // 5日涨幅
+	IncreaseRate10D field.Float64 // 10日涨幅
+	IncreaseRate20D field.Float64 // 20日涨幅
+	Highest52W      field.Float64 // 52周最高价
+	Lowest52W       field.Float64 // 52周最低价
 	Volume          field.Float64 // 成交量(万手)
 	KlineType       field.Int64   // K线类型(0-日K线,1-周K线,2-月K线)
 	TradingDate     field.Time    // 交易日期
@@ -96,6 +99,7 @@ func (s *stockDailyMarket) updateTableName(table string) *stockDailyMarket {
 	s.ALL = field.NewAsterisk(table)
 	s.StockCode = field.NewString(table, "stock_code")
 	s.StockName = field.NewString(table, "stock_name")
+	s.PlateType = field.NewInt64(table, "plate_type")
 	s.Turnover = field.NewFloat64(table, "turnover")
 	s.VolumeRatio = field.NewFloat64(table, "volume_ratio")
 	s.TurnoverRate = field.NewFloat64(table, "turnover_rate")
@@ -105,11 +109,11 @@ func (s *stockDailyMarket) updateTableName(table string) *stockDailyMarket {
 	s.OpeningPrice = field.NewFloat64(table, "opening_price")
 	s.HighestPrice = field.NewFloat64(table, "highest_price")
 	s.LowestPrice = field.NewFloat64(table, "lowest_price")
-	s.IncreaseRate5d = field.NewFloat64(table, "increase_rate_5d")
-	s.IncreaseRate10d = field.NewFloat64(table, "increase_rate_10d")
-	s.IncreaseRate20d = field.NewFloat64(table, "increase_rate_20d")
-	s.Highest52w = field.NewFloat64(table, "highest_52w")
-	s.Lowest52w = field.NewFloat64(table, "lowest_52w")
+	s.IncreaseRate5D = field.NewFloat64(table, "increase_rate_5d")
+	s.IncreaseRate10D = field.NewFloat64(table, "increase_rate_10d")
+	s.IncreaseRate20D = field.NewFloat64(table, "increase_rate_20d")
+	s.Highest52W = field.NewFloat64(table, "highest_52w")
+	s.Lowest52W = field.NewFloat64(table, "lowest_52w")
 	s.Volume = field.NewFloat64(table, "volume")
 	s.KlineType = field.NewInt64(table, "kline_type")
 	s.TradingDate = field.NewTime(table, "trading_date")
@@ -130,9 +134,10 @@ func (s *stockDailyMarket) GetFieldByName(fieldName string) (field.OrderExpr, bo
 }
 
 func (s *stockDailyMarket) fillFieldMap() {
-	s.fieldMap = make(map[string]field.Expr, 20)
+	s.fieldMap = make(map[string]field.Expr, 21)
 	s.fieldMap["stock_code"] = s.StockCode
 	s.fieldMap["stock_name"] = s.StockName
+	s.fieldMap["plate_type"] = s.PlateType
 	s.fieldMap["turnover"] = s.Turnover
 	s.fieldMap["volume_ratio"] = s.VolumeRatio
 	s.fieldMap["turnover_rate"] = s.TurnoverRate
@@ -142,11 +147,11 @@ func (s *stockDailyMarket) fillFieldMap() {
 	s.fieldMap["opening_price"] = s.OpeningPrice
 	s.fieldMap["highest_price"] = s.HighestPrice
 	s.fieldMap["lowest_price"] = s.LowestPrice
-	s.fieldMap["increase_rate_5d"] = s.IncreaseRate5d
-	s.fieldMap["increase_rate_10d"] = s.IncreaseRate10d
-	s.fieldMap["increase_rate_20d"] = s.IncreaseRate20d
-	s.fieldMap["highest_52w"] = s.Highest52w
-	s.fieldMap["lowest_52w"] = s.Lowest52w
+	s.fieldMap["increase_rate_5d"] = s.IncreaseRate5D
+	s.fieldMap["increase_rate_10d"] = s.IncreaseRate10D
+	s.fieldMap["increase_rate_20d"] = s.IncreaseRate20D
+	s.fieldMap["highest_52w"] = s.Highest52W
+	s.fieldMap["lowest_52w"] = s.Lowest52W
 	s.fieldMap["volume"] = s.Volume
 	s.fieldMap["kline_type"] = s.KlineType
 	s.fieldMap["trading_date"] = s.TradingDate
@@ -220,6 +225,8 @@ type IStockDailyMarketDo interface {
 	FirstOrCreate() (*model.StockDailyMarket, error)
 	FindByPage(offset int, limit int) (result []*model.StockDailyMarket, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
+	Rows() (*sql.Rows, error)
+	Row() *sql.Row
 	Scan(result interface{}) (err error)
 	Returning(value interface{}, columns ...string) IStockDailyMarketDo
 	UnderlyingDB() *gorm.DB

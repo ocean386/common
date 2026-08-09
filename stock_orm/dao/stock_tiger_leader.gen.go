@@ -6,6 +6,7 @@ package dao
 
 import (
 	"context"
+	"database/sql"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -47,9 +48,9 @@ func newStockTigerLeader(db *gorm.DB, opts ...gen.DOOption) stockTigerLeader {
 	_stockTigerLeader.HotMoneyName = field.NewString(tableName, "hot_money_name")
 	_stockTigerLeader.HotTlabel = field.NewString(tableName, "hot_tlabel")
 	_stockTigerLeader.ContinuousLeaderTimes = field.NewInt64(tableName, "continuous_leader_times")
-	_stockTigerLeader.Last1monthLeaderTimes = field.NewInt64(tableName, "last_1month_leader_times")
-	_stockTigerLeader.Last3monthsLeaderTimes = field.NewInt64(tableName, "last_3months_leader_times")
-	_stockTigerLeader.Last6monthsLeaderTimes = field.NewInt64(tableName, "last_6months_leader_times")
+	_stockTigerLeader.Last1MonthLeaderTimes = field.NewInt64(tableName, "last_1month_leader_times")
+	_stockTigerLeader.Last3MonthsLeaderTimes = field.NewInt64(tableName, "last_3months_leader_times")
+	_stockTigerLeader.Last6MonthsLeaderTimes = field.NewInt64(tableName, "last_6months_leader_times")
 	_stockTigerLeader.AnnualLeaderTimes = field.NewInt64(tableName, "annual_leader_times")
 	_stockTigerLeader.Industry = field.NewString(tableName, "industry")
 	_stockTigerLeader.IndustryCode = field.NewString(tableName, "industry_code")
@@ -85,9 +86,9 @@ type stockTigerLeader struct {
 	HotMoneyName           field.String  // 游资名称
 	HotTlabel              field.String  // 游资标签
 	ContinuousLeaderTimes  field.Int64   // 连续上榜次数
-	Last1monthLeaderTimes  field.Int64   // 近1个月上榜次数
-	Last3monthsLeaderTimes field.Int64   // 近3个月上榜次数
-	Last6monthsLeaderTimes field.Int64   // 近6个月上榜次数
+	Last1MonthLeaderTimes  field.Int64   // 近1个月上榜次数
+	Last3MonthsLeaderTimes field.Int64   // 近3个月上榜次数
+	Last6MonthsLeaderTimes field.Int64   // 近6个月上榜次数
 	AnnualLeaderTimes      field.Int64   // 近一年上榜次数
 	Industry               field.String  // 行业
 	IndustryCode           field.String  // 行业代码
@@ -128,9 +129,9 @@ func (s *stockTigerLeader) updateTableName(table string) *stockTigerLeader {
 	s.HotMoneyName = field.NewString(table, "hot_money_name")
 	s.HotTlabel = field.NewString(table, "hot_tlabel")
 	s.ContinuousLeaderTimes = field.NewInt64(table, "continuous_leader_times")
-	s.Last1monthLeaderTimes = field.NewInt64(table, "last_1month_leader_times")
-	s.Last3monthsLeaderTimes = field.NewInt64(table, "last_3months_leader_times")
-	s.Last6monthsLeaderTimes = field.NewInt64(table, "last_6months_leader_times")
+	s.Last1MonthLeaderTimes = field.NewInt64(table, "last_1month_leader_times")
+	s.Last3MonthsLeaderTimes = field.NewInt64(table, "last_3months_leader_times")
+	s.Last6MonthsLeaderTimes = field.NewInt64(table, "last_6months_leader_times")
 	s.AnnualLeaderTimes = field.NewInt64(table, "annual_leader_times")
 	s.Industry = field.NewString(table, "industry")
 	s.IndustryCode = field.NewString(table, "industry_code")
@@ -172,9 +173,9 @@ func (s *stockTigerLeader) fillFieldMap() {
 	s.fieldMap["hot_money_name"] = s.HotMoneyName
 	s.fieldMap["hot_tlabel"] = s.HotTlabel
 	s.fieldMap["continuous_leader_times"] = s.ContinuousLeaderTimes
-	s.fieldMap["last_1month_leader_times"] = s.Last1monthLeaderTimes
-	s.fieldMap["last_3months_leader_times"] = s.Last3monthsLeaderTimes
-	s.fieldMap["last_6months_leader_times"] = s.Last6monthsLeaderTimes
+	s.fieldMap["last_1month_leader_times"] = s.Last1MonthLeaderTimes
+	s.fieldMap["last_3months_leader_times"] = s.Last3MonthsLeaderTimes
+	s.fieldMap["last_6months_leader_times"] = s.Last6MonthsLeaderTimes
 	s.fieldMap["annual_leader_times"] = s.AnnualLeaderTimes
 	s.fieldMap["industry"] = s.Industry
 	s.fieldMap["industry_code"] = s.IndustryCode
@@ -248,6 +249,8 @@ type IStockTigerLeaderDo interface {
 	FirstOrCreate() (*model.StockTigerLeader, error)
 	FindByPage(offset int, limit int) (result []*model.StockTigerLeader, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
+	Rows() (*sql.Rows, error)
+	Row() *sql.Row
 	Scan(result interface{}) (err error)
 	Returning(value interface{}, columns ...string) IStockTigerLeaderDo
 	UnderlyingDB() *gorm.DB

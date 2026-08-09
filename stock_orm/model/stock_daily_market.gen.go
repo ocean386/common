@@ -14,6 +14,7 @@ const TableNameStockDailyMarket = "stock_daily_market"
 type StockDailyMarket struct {
 	StockCode       string    `gorm:"column:stock_code;type:varchar(10);primaryKey;comment:股票代码" json:"stock_code"`                            // 股票代码
 	StockName       string    `gorm:"column:stock_name;type:varchar(30);not null;comment:股票名称" json:"stock_name"`                              // 股票名称
+	PlateType       int64     `gorm:"column:plate_type;type:tinyint(4);not null;comment:盘股类型(0-全部,1-微小盘,2-小盘,3-中盘,4-大盘)" json:"plate_type"`    // 盘股类型(0-全部,1-微小盘,2-小盘,3-中盘,4-大盘)
 	Turnover        float64   `gorm:"column:turnover;type:decimal(10,2);not null;default:0.00;comment:成交额(亿)" json:"turnover"`                 // 成交额(亿)
 	VolumeRatio     float64   `gorm:"column:volume_ratio;type:decimal(8,2);not null;default:0.00;comment:量比" json:"volume_ratio"`              // 量比
 	TurnoverRate    float64   `gorm:"column:turnover_rate;type:decimal(8,2);not null;default:0.00;comment:换手" json:"turnover_rate"`            // 换手
@@ -23,11 +24,11 @@ type StockDailyMarket struct {
 	OpeningPrice    float64   `gorm:"column:opening_price;type:decimal(8,2);not null;default:0.00;comment:开盘" json:"opening_price"`            // 开盘
 	HighestPrice    float64   `gorm:"column:highest_price;type:decimal(8,2);not null;default:0.00;comment:最高" json:"highest_price"`            // 最高
 	LowestPrice     float64   `gorm:"column:lowest_price;type:decimal(8,2);not null;default:0.00;comment:最低" json:"lowest_price"`              // 最低
-	IncreaseRate5d  float64   `gorm:"column:increase_rate_5d;type:decimal(8,2);not null;default:0.00;comment:5日涨幅" json:"increase_rate_5d"`    // 5日涨幅
-	IncreaseRate10d float64   `gorm:"column:increase_rate_10d;type:decimal(8,2);not null;default:0.00;comment:10日涨幅" json:"increase_rate_10d"` // 10日涨幅
-	IncreaseRate20d float64   `gorm:"column:increase_rate_20d;type:decimal(8,2);not null;default:0.00;comment:20日涨幅" json:"increase_rate_20d"` // 20日涨幅
-	Highest52w      float64   `gorm:"column:highest_52w;type:decimal(8,2);not null;default:0.00;comment:52周最高价" json:"highest_52w"`            // 52周最高价
-	Lowest52w       float64   `gorm:"column:lowest_52w;type:decimal(8,2);not null;default:0.00;comment:52周最低价" json:"lowest_52w"`              // 52周最低价
+	IncreaseRate5D  float64   `gorm:"column:increase_rate_5d;type:decimal(8,2);not null;default:0.00;comment:5日涨幅" json:"increase_rate_5d"`    // 5日涨幅
+	IncreaseRate10D float64   `gorm:"column:increase_rate_10d;type:decimal(8,2);not null;default:0.00;comment:10日涨幅" json:"increase_rate_10d"` // 10日涨幅
+	IncreaseRate20D float64   `gorm:"column:increase_rate_20d;type:decimal(8,2);not null;default:0.00;comment:20日涨幅" json:"increase_rate_20d"` // 20日涨幅
+	Highest52W      float64   `gorm:"column:highest_52w;type:decimal(8,2);not null;default:0.00;comment:52周最高价" json:"highest_52w"`            // 52周最高价
+	Lowest52W       float64   `gorm:"column:lowest_52w;type:decimal(8,2);not null;default:0.00;comment:52周最低价" json:"lowest_52w"`              // 52周最低价
 	Volume          float64   `gorm:"column:volume;type:decimal(10,1);not null;default:0.0;comment:成交量(万手)" json:"volume"`                     // 成交量(万手)
 	KlineType       int64     `gorm:"column:kline_type;type:tinyint(4);not null;comment:K线类型(0-日K线,1-周K线,2-月K线)" json:"kline_type"`            // K线类型(0-日K线,1-周K线,2-月K线)
 	TradingDate     time.Time `gorm:"column:trading_date;type:date;primaryKey;comment:交易日期" json:"trading_date"`                               // 交易日期
