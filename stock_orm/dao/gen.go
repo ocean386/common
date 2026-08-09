@@ -30,6 +30,7 @@ var (
 	StockFundRank      *stockFundRank
 	StockHotRank       *stockHotRank
 	StockIndustry      *stockIndustry
+	StockIndustryList  *stockIndustryList
 	StockOrderChange   *stockOrderChange
 	StockStrong        *stockStrong
 	StockTigerLeader   *stockTigerLeader
@@ -50,6 +51,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	StockFundRank = &Q.StockFundRank
 	StockHotRank = &Q.StockHotRank
 	StockIndustry = &Q.StockIndustry
+	StockIndustryList = &Q.StockIndustryList
 	StockOrderChange = &Q.StockOrderChange
 	StockStrong = &Q.StockStrong
 	StockTigerLeader = &Q.StockTigerLeader
@@ -71,6 +73,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		StockFundRank:      newStockFundRank(db, opts...),
 		StockHotRank:       newStockHotRank(db, opts...),
 		StockIndustry:      newStockIndustry(db, opts...),
+		StockIndustryList:  newStockIndustryList(db, opts...),
 		StockOrderChange:   newStockOrderChange(db, opts...),
 		StockStrong:        newStockStrong(db, opts...),
 		StockTigerLeader:   newStockTigerLeader(db, opts...),
@@ -93,12 +96,15 @@ type Query struct {
 	StockFundRank      stockFundRank
 	StockHotRank       stockHotRank
 	StockIndustry      stockIndustry
+	StockIndustryList  stockIndustryList
 	StockOrderChange   stockOrderChange
 	StockStrong        stockStrong
 	StockTigerLeader   stockTigerLeader
 }
 
 func (q *Query) Available() bool { return q.db != nil }
+
+func (q *Query) UnderlyingDB() *gorm.DB { return q.db }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
@@ -116,6 +122,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		StockFundRank:      q.StockFundRank.clone(db),
 		StockHotRank:       q.StockHotRank.clone(db),
 		StockIndustry:      q.StockIndustry.clone(db),
+		StockIndustryList:  q.StockIndustryList.clone(db),
 		StockOrderChange:   q.StockOrderChange.clone(db),
 		StockStrong:        q.StockStrong.clone(db),
 		StockTigerLeader:   q.StockTigerLeader.clone(db),
@@ -123,11 +130,11 @@ func (q *Query) clone(db *gorm.DB) *Query {
 }
 
 func (q *Query) ReadDB() *Query {
-	return q.ReplaceDB(q.db.Clauses(dbresolver.Read))
+	return q.clone(q.db.Clauses(dbresolver.Read))
 }
 
 func (q *Query) WriteDB() *Query {
-	return q.ReplaceDB(q.db.Clauses(dbresolver.Write))
+	return q.clone(q.db.Clauses(dbresolver.Write))
 }
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
@@ -146,6 +153,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		StockFundRank:      q.StockFundRank.replaceDB(db),
 		StockHotRank:       q.StockHotRank.replaceDB(db),
 		StockIndustry:      q.StockIndustry.replaceDB(db),
+		StockIndustryList:  q.StockIndustryList.replaceDB(db),
 		StockOrderChange:   q.StockOrderChange.replaceDB(db),
 		StockStrong:        q.StockStrong.replaceDB(db),
 		StockTigerLeader:   q.StockTigerLeader.replaceDB(db),
@@ -166,6 +174,7 @@ type queryCtx struct {
 	StockFundRank      IStockFundRankDo
 	StockHotRank       IStockHotRankDo
 	StockIndustry      IStockIndustryDo
+	StockIndustryList  IStockIndustryListDo
 	StockOrderChange   IStockOrderChangeDo
 	StockStrong        IStockStrongDo
 	StockTigerLeader   IStockTigerLeaderDo
@@ -186,6 +195,7 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		StockFundRank:      q.StockFundRank.WithContext(ctx),
 		StockHotRank:       q.StockHotRank.WithContext(ctx),
 		StockIndustry:      q.StockIndustry.WithContext(ctx),
+		StockIndustryList:  q.StockIndustryList.WithContext(ctx),
 		StockOrderChange:   q.StockOrderChange.WithContext(ctx),
 		StockStrong:        q.StockStrong.WithContext(ctx),
 		StockTigerLeader:   q.StockTigerLeader.WithContext(ctx),
